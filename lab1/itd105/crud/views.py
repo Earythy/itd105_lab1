@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout
 from .models import medicine
+from django.contrib import messages
 
 def login(request):
     return render(request, 'signin.html')
@@ -124,9 +125,11 @@ def add_med(request):
             med_expiry=med_expiry,
             med_stock=med_stock,
             med_status=med_status
-        )
+            
+            )
 
-        message = "Data Successfully Added"
+        messages.success(request, 'Medicine added successfully!')
+        
         #return redirect(reverse('eda'))
         return redirect("/view")
 
@@ -162,6 +165,7 @@ def update(request, id):
 
         # Save the updated instance
         med.save()
+        messages.success(request, 'Medicine updated successfully!')
 
         return redirect("/view")
 
@@ -171,4 +175,6 @@ def update(request, id):
 def destroy(request, id):  
     med = medicine.objects.get(id=id)  
     med.delete()
+    messages.error(request, 'Medicine Deleted successfully!')
+
     return redirect("/view")  
